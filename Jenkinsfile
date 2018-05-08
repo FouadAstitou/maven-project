@@ -27,7 +27,7 @@ stages {
                 timeout(time: 5, unit: 'DAYS') {
                     input message: 'Approve PRODUCTION Deployment?'
                 }
-                build job: 'deploy-to-pod'
+                build job: 'deploy-to-prod'
             }
             post {
                 success {
