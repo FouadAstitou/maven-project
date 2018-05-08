@@ -2,8 +2,8 @@ pipeline {
     agent any
  tools {
     maven 'localMAVEN'
-  }
-    stages{
+ }
+stages {
         stage('Build'){
             steps {
                 sh 'mvn clean package'
@@ -15,28 +15,28 @@ pipeline {
                 }
             }
         }
+
         stage ('Deploy to Staging') {
             steps {
                 build job: 'deploy-to-staging'
             }
         }
 
+        stage ('Deploy to Production') {
+            steps {
+                timeout(time: 5, unit: 'DAYS') {
+                    input message: 'Approve PRODUCTION Deployment?'
+                }
+                build job: 'deploy-to-pod'
+            }
+            post {
+                success {
+                    echo 'Code deployed to Production.'
+                }
+                failure {
+                    echo 'Deployment failed.'
+                }
+            }
         }
-        // stage ('Deploy to Production') {
-        //     steps {
-        //         timeout(time: 5, unit: 'DAYS') {
-        //             input message: 'Approve PRODUCTION Deployment?'
-        //         }
-        //         build job: 'deploy-to-pod'
-        //     }
-        //     post {
-        //         success {
-        //             echo 'Code deployed to Production.'
-        //         }
-        //         failure {
-        //             echo 'Deployment failed.'
-        //         }
-        //     }
-        // }
     }
 }
