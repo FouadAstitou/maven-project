@@ -17,6 +17,7 @@ stages{
         stage('Build'){
             steps {
                 sh 'mvn clean package'
+		echo 'Ola'
             }
             post {
                 success {
